@@ -85,9 +85,10 @@ public class PingPongRight {
              */
 
             // DONE - You fill in here.
-            for (int i = 0; i < this.mMaxLoopIterations; i++) {
+            for (int i = 1; i <= this.mMaxLoopIterations; i++) {
                 acquire();
-                System.out.println(this.stringToPrint);
+                System.out.println(this.stringToPrint + " (" + i + ")");
+
                 release();
             }
 
@@ -142,8 +143,8 @@ public class PingPongRight {
                                                          maxIterations);
 
         PlayPingPongThread pong = new PlayPingPongThread(pongString,
-                                                         pingSema,
                                                          pongSema,
+                                                         pingSema,
                                                          maxIterations);
 
         // DONE - Initiate the ping and pong threads, which will call
