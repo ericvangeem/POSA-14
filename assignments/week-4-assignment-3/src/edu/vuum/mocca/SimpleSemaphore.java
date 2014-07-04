@@ -19,7 +19,6 @@ public class SimpleSemaphore {
                             boolean fair)
     {
         // DONE - you fill in here
-        System.out.println("permits passed to constructor: " + permits);
         this.permits = permits;
         this.mLock = new ReentrantLock(fair);
 
@@ -41,7 +40,6 @@ public class SimpleSemaphore {
                 permitsAvailable.await();
 
             --permits;
-            System.out.println("decremented permits to: " + permits);
         } finally {
             mLock.unlock();
         }
@@ -63,7 +61,6 @@ public class SimpleSemaphore {
                 permitsAvailable.awaitUninterruptibly();
 
             --permits;
-            System.out.println("decremented permits to: " + permits);
         } finally {
             mLock.unlock();
         }
@@ -78,8 +75,6 @@ public class SimpleSemaphore {
 
         try {
             ++permits;
-
-            System.out.println("incremented permits to: " + permits);
 
             if (permits > 0) { //if block is an optimization, not necessary
                 permitsAvailable.signal();
