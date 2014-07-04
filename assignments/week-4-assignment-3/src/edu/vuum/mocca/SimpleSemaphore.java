@@ -1,66 +1,110 @@
 package edu.vuum.mocca;
-import java.util.concurrent.locks.Condition;
+
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.Condition;
 
 /**
  * @class SimpleSemaphore
- * 
- * @brief This class provides a simple counting semaphore implementation using
- *        Java a ReentrantLock and a ConditionObject (which is accessed via a
- *        Condition). It must implement both "Fair" and "NonFair" semaphore
- *        semantics, just liked Java Semaphores.
+ *
+ * @brief This class provides a simple counting semaphore
+ *        implementation using Java a ReentrantLock and a
+ *        ConditionObject.  It must implement both "Fair" and
+ *        "NonFair" semaphore semantics, just liked Java Semaphores. 
  */
 public class SimpleSemaphore {
     /**
-     * Define a ReentrantLock to protect the critical section.
+     * Constructor initialize the data members.  
      */
-    // TODO - you fill in here
+    public SimpleSemaphore (int permits,
+                            boolean fair)
+    {
+        // DONE - you fill in here
+        System.out.println("permits passed to constructor: " + permits);
+        this.permits = permits;
+        this.mLock = new ReentrantLock(fair);
 
-    /**
-     * Define a Condition that waits while the number of permits is 0.
-     */
-    // TODO - you fill in here
-
-    /**
-     * Define a count of the number of available permits.
-     */
-    // TODO - you fill in here. Make sure that this data member will
-    // ensure its values aren't cached by multiple Threads..
-
-    public SimpleSemaphore(int permits, boolean fair) {
-        // TODO - you fill in here to initialize the SimpleSemaphore,
-        // making sure to allow both fair and non-fair Semaphore
-        // semantics.
+        permitsAvailable = this.mLock.newCondition();
     }
 
     /**
-     * Acquire one permit from the semaphore in a manner that can be
-     * interrupted.
+     * Acquire one permit from the semaphore in a manner that can
+     * be interrupted.
      */
     public void acquire() throws InterruptedException {
-        // TODO - you fill in here.
+        // DONE - you fill in here
+        mLock.lockInterruptibly();
+
+        try {
+            // Guarded suspension should be in a try block here since await() can be
+            // interrupted, which would throw an InterruptedException in that case
+            while (permits == 0)
+                permitsAvailable.await();
+
+            --permits;
+            System.out.println("decremented permits to: " + permits);
+        } finally {
+            mLock.unlock();
+        }
     }
 
     /**
-     * Acquire one permit from the semaphore in a manner that cannot be
-     * interrupted.
+     * Acquire one permit from the semaphore in a manner that
+     * cannot be interrupted.
      */
     public void acquireUninterruptibly() {
-        // TODO - you fill in here.
+        // DONE - you fill in here
+        mLock.lock();
+
+
+        try {
+            // Guarded suspension should be in a try block under any circumstance.
+            // in theory, it's not necessary, but much safer and acceptable to do so anyways.
+            while (permits == 0)
+                permitsAvailable.awaitUninterruptibly();
+
+            --permits;
+            System.out.println("decremented permits to: " + permits);
+        } finally {
+            mLock.unlock();
+        }
     }
 
     /**
      * Return one permit to the semaphore.
      */
     void release() {
-        // TODO - you fill in here.
+        // DONE - you fill in here
+        mLock.lock();
+
+        try {
+            ++permits;
+
+            System.out.println("incremented permits to: " + permits);
+
+            if (permits > 0) { //if block is an optimization, not necessary
+                permitsAvailable.signal();
+            }
+        } finally {
+            mLock.unlock();
+        }
     }
 
     /**
-     * Return the number of permits available.
+     * Define a ReentrantLock to protect the critical section.
      */
-    public int availablePermits() {
-        // TODO - you fill in here to return the correct result
-    	return 0;
-    }
+    // DONE? - you fill in here
+    private ReentrantLock mLock;
+
+    /**
+     * Define a ConditionObject to wait while the number of
+     * permits is 0.
+     */
+    // DONE - you fill in here
+    private Condition permitsAvailable;
+
+    /**
+     * Define a count of the number of available permits.
+     */
+    // DONE? - you fill in here
+    int permits;
 }
