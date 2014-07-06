@@ -83,16 +83,17 @@ public class PingPongRight {
              * This method runs in a separate thread of control and
              * implements the core ping/pong algorithm.
              */
+            try {
+                // DONE - You fill in here.
+                for (int i = 1; i <= this.mMaxLoopIterations; i++) {
+                    acquire();
+                    System.out.println(this.stringToPrint + " (" + i + ")");
 
-            // DONE - You fill in here.
-            for (int i = 1; i <= this.mMaxLoopIterations; i++) {
-                acquire();
-                System.out.println(this.stringToPrint + " (" + i + ")");
-
-                release();
+                    release();
+                }
+            } finally {
+                mLatch.countDown();
             }
-
-            mLatch.countDown();
         }
 
         /**
