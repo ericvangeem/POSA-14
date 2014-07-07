@@ -6,6 +6,7 @@ import java.util.concurrent.CountDownLatch;
 import android.app.Activity;
 import android.widget.TextView;
 import android.util.Log;
+import android.widget.Toast;
 
 /**
  * @class AndroidPlatformStrategy
@@ -46,7 +47,8 @@ public class AndroidPlatformStrategy extends PlatformStrategy
     public void begin()
     {
         /** (Re)initialize the CountDownLatch. */
-        // TODO - You fill in here.
+        // DONE - You fill in here.
+        mLatch = new CountDownLatch(2);
     }
 
     /** Print the outputString to the display. */
@@ -56,19 +58,40 @@ public class AndroidPlatformStrategy extends PlatformStrategy
          * Create a Runnable that's posted to the UI looper thread
          * and appends the outputString to a TextView. 
          */
-        // TODO - You fill in here.
+        // DONE - You fill in here.
+        mActivity.get().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mTextViewOutput.append(outputString + "\n");
+            }
+        });
     }
 
     /** Indicate that a game thread has finished running. */
     public void done()
     {	
-        // TODO - You fill in here.
+        // DONE - You fill in here.
+        mLatch.countDown();
+
+        final String threadName = Thread.currentThread().getName();
+
+        mActivity.get().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(mActivity.get().getApplicationContext(),
+                               "Game thread " + threadName +" has finished running!",
+                               Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     /** Barrier that waits for all the game threads to finish. */
     public void awaitDone()
     {
-        // TODO - You fill in here.
+        // DONE - You fill in here.
+        try {
+            mLatch.await();
+        } catch (InterruptedException e) { }
     }
 
     /** 
