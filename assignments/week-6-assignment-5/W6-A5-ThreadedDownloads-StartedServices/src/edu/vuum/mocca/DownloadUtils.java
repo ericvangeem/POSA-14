@@ -50,7 +50,7 @@ public class DownloadUtils {
      */
     // TODO - You can change this to the appropriate setting for your
     // environment.
-    static final boolean DOWNLOAD_OFFLINE = true;
+    static final boolean DOWNLOAD_OFFLINE = false;
     
     /**
      * Make an Intent which will start a service if provided as a
@@ -157,7 +157,7 @@ public class DownloadUtils {
                                        Uri uri) {
     	
     	try {
-    	
+
             // If we're offline, write the image in our resources to
             // disk, then return that pathname.
             if (DOWNLOAD_OFFLINE) {
