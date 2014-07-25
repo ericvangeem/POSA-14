@@ -47,7 +47,7 @@ public class LoginActivity extends StoryActivityBase{
 	public static File getLoginFile (Context context) {
 		return StorageUtilities.getOutputMediaFile(context, 	// Line 48
 				StorageUtilities.MEDIA_TYPE_TEXT, 
-				MAX_SECURITY, 
+				StorageUtilities.SECURITY_PRIVATE,
 				"login.txt");
 	}
 	
@@ -84,7 +84,7 @@ public class LoginActivity extends StoryActivityBase{
 		File loginFile = getLoginFile(context);
 		
 		String out = null;
-		
+
 		// If it already exists, read the login information from the file and display it
 		if (loginFile != null && loginFile.exists()) {
 			try {
