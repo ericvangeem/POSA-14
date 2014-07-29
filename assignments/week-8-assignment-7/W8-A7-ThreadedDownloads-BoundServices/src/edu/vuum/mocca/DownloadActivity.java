@@ -104,12 +104,12 @@ public class DownloadActivity extends DownloadBase {
             @Override
 		public void onServiceConnected(ComponentName name,
                                                IBinder service) {
-                // TODO You fill in here to replace null with a call
+                // DONE You fill in here to replace null with a call
                 // to a generated stub method that converts the
                 // service parameter into an interface that can be
                 // used to make RPC calls to the Service.
 
-                mDownloadRequest = null;
+                mDownloadRequest = DownloadRequest.Stub.asInterface(service);
             }
 
             /**
@@ -139,13 +139,20 @@ public class DownloadActivity extends DownloadBase {
              */
             @Override
             public void sendPath(final String imagePathname) throws RemoteException {
-                // TODO - You fill in here to replace null with a new
+                // DONE - You fill in here to replace null with a new
                 // Runnable whose run() method displays the bitmap
                 // image whose pathname is passed as a parameter to
                 // sendPath().  Please use displayBitmap() defined in
                 // DownloadBase.
 
-                Runnable displayRunnable = null;
+                Runnable displayRunnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        displayBitmap(imagePathname);
+                    }
+                };
+
+                runOnUiThread(displayRunnable);
             }
         };
      

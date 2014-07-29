@@ -47,11 +47,12 @@ public class DownloadBoundServiceSync extends Service {
              */
             @Override
             public String downloadImage(Uri uri) throws RemoteException {
-                // TODO You fill in here to replace the null and
+                // DONE You fill in here to replace the null and
                 // download the file using the appropriate helper
                 // method in DownloadUtils and then return the
                 // pathname back to the client.
-                return null;
+
+                return DownloadUtils.downloadFile(getApplicationContext(), uri);
             }
 	};
 	
@@ -72,8 +73,8 @@ public class DownloadBoundServiceSync extends Service {
      * @param context		The context of the calling component.
      */
     public static Intent makeIntent(Context context) {
-        // TODO - replace the null to create the appropriate Intent
+        // DONE - replace the null to create the appropriate Intent
         // and return it to the caller.
-        return null;
+        return new Intent(context, DownloadBoundServiceSync.class);
     }
 }

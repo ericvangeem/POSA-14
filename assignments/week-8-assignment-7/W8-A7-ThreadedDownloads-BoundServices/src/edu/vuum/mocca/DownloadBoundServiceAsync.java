@@ -48,10 +48,13 @@ public class DownloadBoundServiceAsync extends Service{
             public void downloadImage(Uri uri,
                                       DownloadCallback callback)
                 throws RemoteException {
-                // TODO You fill in here to download the file using
+                // DONE You fill in here to download the file using
                 // the appropriate helper method in DownloadUtils and
                 // then send the pathname back to the client via the
                 // callback object.
+
+                String filePath = DownloadUtils.downloadFile(getApplicationContext(), uri);
+                callback.sendPath(filePath);
             }
 		
 	};
@@ -73,8 +76,8 @@ public class DownloadBoundServiceAsync extends Service{
      * @param context		The context of the calling component.
      */
     public static Intent makeIntent(Context context) {
-        // TODO - replace the null to create the appropriate Intent
+        // DONE - replace the null to create the appropriate Intent
         // and return it to the caller.
-        return null;
+        return new Intent(context, DownloadBoundServiceAsync.class);
     }
 }
